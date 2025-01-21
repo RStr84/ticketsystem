@@ -34,7 +34,7 @@ final class TicketFactory extends PersistentProxyObjectFactory
         return [
             'created_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'description' => self::faker()->text(255),
-            'title' => self::faker()->text(255),
+            'title' => self::faker()->words(4, true),
         ];
     }
 
