@@ -13,11 +13,15 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
 
+        // statisch
         $user = new User();
         $user -> setFName('Manuel');
         $user -> setLName('Martinez');
         $user ->setEmail('admin@bbq.de');
         $manager->persist($user);
+
+        // dynamisch
+//        UserFactory::createOne(['email' => 'admin@bbq.de', 'fName' => 'Manuel', 'lName' => 'Martinez']);
 
         TicketFactory::createMany(100);
         UserFactory::createMany(20);
