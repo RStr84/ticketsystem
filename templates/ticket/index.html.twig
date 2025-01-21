@@ -1,10 +1,10 @@
-<h1>Hallo Welt</h1>
+<h1>Tickets</h1>
 
 {% for ticket in tickets %}
 
-<div> {{ ticket.title }}</div>
-<div> {{ ticket.description }}</div>
-<div> {{ ticket.id }}</div>
-<div> {{ ticket.createdat.format('d-M-Y h:i:s') }}</div>
+    <div> {{ ticket.id }}</div>
+    <div> {{ ticket.title }}</div>
+    <div> {{ ticket.description }}</div>
+    <div> {{ ticket.createdat.format('d-M-Y h:i:s') }}</div><br>
 
 {% endfor %}
