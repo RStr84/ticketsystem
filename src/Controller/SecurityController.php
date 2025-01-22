@@ -18,6 +18,12 @@ final class SecurityController extends AbstractController
 
     #[Route('/logout', name: 'app_logout')]
     public function logout() {
+        // dd bzw. logout() wird nie ausgeführt
+        dd('logout');
+    }
 
+    #[Route('/', name: 'app_home')]
+    public function home() {
+        dd('Home');
     }
 }
