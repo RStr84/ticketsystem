@@ -9,10 +9,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\CustomCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
@@ -75,15 +77,19 @@ class CustomAuthenticator extends AbstractAuthenticator
 //                return $user;
 //            }),
 ////
-
-
-            new UserBadge($email),
-            new CustomCredentials(function ($credentials, User $user) {
+                // mit CustomCredentials
+//            new UserBadge($email),
+//            new CustomCredentials(function ($credentials, User $user) {
 //                dd($credentials, $user);
 
-                return $credentials === '123456';
-            }
-            , $password)
+//                return $credentials === '123456';
+//            }
+//            , $password)
+
+            // mit PasswordCredentials
+            new UserBadge($email),
+            new PasswordCredentials($password),[
+            new RememberMeBadge(),]
         );
 
 

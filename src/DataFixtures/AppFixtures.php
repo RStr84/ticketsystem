@@ -14,15 +14,14 @@ class AppFixtures extends Fixture
     {
 
         // statisch
-        $user = new User();
-        $user -> setFName('Manuel');
-        $user -> setLName('Martinez');
-        $user ->setEmail('admin@bbq.de');
-        $manager->persist($user);
+//        $user = new User();
+//        $user -> setFName('Manuel');
+//        $user -> setLName('Martinez');
+//        $user ->setEmail('admin@bbq.de');
+//        $manager->persist($user);
 
-        // dynamisch
-//        UserFactory::createOne(['email' => 'admin@bbq.de', 'fName' => 'Manuel', 'lName' => 'Martinez']);
-
+        // dynamisch, wichtig für den passwordHash → statisch geht nicht
+        UserFactory::createOne(['email' => 'admin@bbq.de', 'fName' => 'Manuel', 'lName' => 'Martinez', 'plainPassword' => 'admin']);
         TicketFactory::createMany(100);
         UserFactory::createMany(20);
 
