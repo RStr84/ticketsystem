@@ -9,11 +9,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/ticket')]
+//#[Route('/ticket')]
+//#[IsGranted("ROLE_ADMIN")]
+// security.yaml wird zuerst ausgeführt access control
 final class TicketController extends AbstractController
 {
-    #[Route('/', name: 'app_ticket_index')]
+    #[Route('/ticket', name: 'app_ticket_index')]
     public function index(TicketRepository $ticketRepository): Response
     {
 
@@ -45,7 +48,7 @@ final class TicketController extends AbstractController
         'tickets' => $tickets]);
     }
 
-    #[Route('/new', name: 'app_ticket_new')]
+    #[Route('/ticket/new', name: 'app_ticket_new')]
     public function new(EntityManagerInterface $entityManager): Response
     {
         $ticket = new Ticket();
@@ -59,16 +62,20 @@ final class TicketController extends AbstractController
         return $this->render('ticket/new.html.twig',[]);
     }
 
-    #[Route('/delete/{id}', name: 'app_ticket_delete')]
+    #[Route('/ticket/delete/{id}', name: 'app_ticket_delete')]
+    #[IsGranted('ROLE_DELETE')]
     public function delete(Ticket $ticket, EntityManagerInterface $entityManager): Response
     {
+        // Alternative zu IsGranted Attribut -> Attribut besser
+//        $this->denyAccessUnlessGranted('ROLE_DELETE');
+
         $entityManager->remove($ticket);
         $entityManager->flush();
 
         return $this->redirectToRoute('app_ticket_index');
     }
 
-    #[Route('/update/{id}', name: 'app_ticket_update')]
+    #[Route('/ticket/update/{id}', name: 'app_ticket_update')]
     public function update(Ticket $ticket, EntityManagerInterface $entityManager): Response
     {
         $ticket->setTitle('abcd');
@@ -78,6 +85,11 @@ final class TicketController extends AbstractController
         $entityManager->persist($ticket);
         $entityManager->flush();
         return $this->redirectToRoute('app_ticket_index');
+    }
+
+    #[Route('/wichtig', name: 'app_wichtig')]
+    public function dahin() :Response {
+        return $this->render('ticket/wichtig.html.twig');
     }
 
 }

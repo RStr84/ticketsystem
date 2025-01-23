@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block body %}
+
+    <h1> {{ app.user.fName }} </h1>
+
+    {% if is_granted("ROLE_DELETE") %}
+        <button>Delete</button>
+    {% endif %}
+
+    {% if is_granted("ROLE_EDIT") %}
+        <button>Edit</button>
+    {% endif %}
+
+{% endblock %}
+
+
+

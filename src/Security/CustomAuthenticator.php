@@ -20,13 +20,16 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\CustomCre
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
+use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 /**
  * @see https://symfony.com/doc/current/security/custom_authenticator.html
  */
-class CustomAuthenticator extends AbstractAuthenticator
+class CustomAuthenticator extends AbstractAuthenticator implements AuthenticationEntryPointInterface
 {
+    use TargetPathTrait;
 
     private RouterInterface $router;
 
@@ -114,6 +117,11 @@ class CustomAuthenticator extends AbstractAuthenticator
     {
         // on success, let the request continue
 
+        $target = $this->getTargetPath($request->getSession(), $firewallName);
+        if ($target) {
+            return new RedirectResponse($target);
+        }
+
 //        dd('er ist drin');
         return new RedirectResponse($this->router->generate('app_ticket_index'));
     }
@@ -136,14 +144,16 @@ class CustomAuthenticator extends AbstractAuthenticator
 //        return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
     }
 
-    // public function start(Request $request, ?AuthenticationException $authException = null): Response
-    // {
-    //     /*
-    //      * If you would like this class to control what happens when an anonymous user accesses a
-    //      * protected page (e.g. redirect to /login), uncomment this method and make this class
-    //      * implement Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface.
-    //      *
-    //      * For more details, see https://symfony.com/doc/current/security/experimental_authenticators.html#configuring-the-authentication-entry-point
-    //      */
-    // }
+     public function start(Request $request, ?AuthenticationException $authException = null): Response
+     {
+         // wenn keine Berechtigung, dann Weiterleitung zum Login
+         return new RedirectResponse($this->router->generate('app_login'));
+         /*
+          * If you would like this class to control what happens when an anonymous user accesses a
+          * protected page (e.g. redirect to /login), uncomment this method and make this class
+          * implement Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface.
+          *
+          * For more details, see https://symfony.com/doc/current/security/experimental_authenticators.html#configuring-the-authentication-entry-point
+          */
+     }
 }
