@@ -22,6 +22,10 @@ class Ticket
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
+    #[ORM\ManyToOne(inversedBy: 'tickets')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +63,18 @@ class Ticket
     public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

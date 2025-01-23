@@ -24,8 +24,10 @@ class AppFixtures extends Fixture
         UserFactory::createOne(['email' => 'admin@bbq.de', 'fName' => 'Raphael', 'lName' => 'Straschewski', 'plainPassword' => 'admin', 'roles' => ['ROLE_ADMIN']]);
         UserFactory::createOne(['email' => 'sup@bbq.de', 'fName' => 'Sven', 'lName' => 'Svenson', 'plainPassword' => 'admin', 'roles' => ['ROLE_SUP']]);
         UserFactory::createOne(['email' => 'user@bbq.de', 'fName' => 'Andreas', 'lName' => 'Andreason', 'plainPassword' => 'admin']);
-        TicketFactory::createMany(100);
-        UserFactory::createMany(20);
+        UserFactory::createMany(15);
+        TicketFactory::createMany(100 , function () {
+            return ['user' => UserFactory::random()];
+        });
 
         $manager->flush();
     }
